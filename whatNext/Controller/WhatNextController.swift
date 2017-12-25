@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class WhatNextController: UITableViewController {
 
@@ -14,11 +15,12 @@ class WhatNextController: UITableViewController {
     
     let defaults = UserDefaults.standard
     
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    
     //File Path and Create custom plist
     
-    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Item.plist")
+    //let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Item.plist")
     
-    //print(dataFilePath)
     
     override func viewDidLoad() {
         
@@ -26,7 +28,7 @@ class WhatNextController: UITableViewController {
         
         //Hardcode itemArray
         
-//        let newItem = Item()
+        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
 //
 //        newItem.title = "Swift"
 //
@@ -107,23 +109,31 @@ class WhatNextController: UITableViewController {
         
         //What will happen once user click on add item on UIAlert
         
+        
+        
+        
+        
         let action = UIAlertAction(title: "Add item", style: .default) { action in
             
             //print("Success!")
             
-            let newItem = Item()
+            let newItem = Item(context: self.context)
             
             newItem.title = textFieldInAlert.text!
             
             self.itemArray.append(newItem)
             
-            //self.defaults.set(self.itemArray, forKey: "whatNextItemArray")
-            
-            //TODO:- Call saveItems method
+            newItem.done = false
             
             self.saveItems()
             
+            //self.defaults.set(self.itemArray, forKey: "whatNextItemArray")
+            
+            //TODO:- Call saveItems method
+       
         }
+        
+        
         
         //Add alert Textfield
         
@@ -147,16 +157,14 @@ class WhatNextController: UITableViewController {
     
     func saveItems() {
         
-        let encoder = PropertyListEncoder()
+       
         
         do {
-            let data =  try encoder.encode(itemArray)
-            
-            try data.write(to: dataFilePath!)
+           try context.save()
             
         } catch {
             
-            print("Error encoding item array \(error)")
+            print("Error saving context \(error)")
         }
         
         self.tableView.reloadData()
@@ -164,18 +172,17 @@ class WhatNextController: UITableViewController {
     }
     
     func loadItems() {
-        if let data = try? Data(contentsOf: dataFilePath!) {
+        let request : NSFetchRequest<Item> = Item.fetchRequest()
+        
+        do {
+             itemArray =  try context.fetch(request)
             
-            let decoder = PropertyListDecoder()
+        } catch {
             
-            do {
-                
-                itemArray = try decoder.decode([Item].self, from: data)
-            } catch {
-                print("Cannot decode itemArray \(error)")
-            }
-            
+            print("Error fetching data from context \(error)")
         }
+        
+        
     }
 
 
