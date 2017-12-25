@@ -14,31 +14,36 @@ class WhatNextController: UITableViewController {
     
     let defaults = UserDefaults.standard
     
+    //File Path and Create custom plist
+    
+    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Item.plist")
+    
+    //print(dataFilePath)
+    
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         
-        let newItem = Item()
+        //Hardcode itemArray
         
-        newItem.title = "Swift"
+//        let newItem = Item()
+//
+//        newItem.title = "Swift"
+//
+//        itemArray.append(newItem)
+//
+//
+//        let newItem2 = Item()
+//
+//        newItem2.title = "PHP"
+//
+//        itemArray.append(newItem2)
         
-        itemArray.append(newItem)
+//        if let items = defaults.array(forKey: "whatNextItemArray") as? [Item] {
+//            itemArray = items
+//        }
+        loadItems()
 
-        
-        let newItem2 = Item()
-        
-        newItem2.title = "PHP"
-        
-        itemArray.append(newItem2)
-        
-        if let items = defaults.array(forKey: "whatNextItemArray") as? [Item] {
-            itemArray = items
-        }
-        
-        
-        
-        
-        
-        
     }
     //MARK: - TableView DataSource Delegate Methods
     
@@ -67,6 +72,10 @@ class WhatNextController: UITableViewController {
         //print(itemArray[indexPath.row])
         
         itemArray[indexPath.row].done = !itemArray[indexPath.row].done
+        
+        //TODO:- Call saveItems method
+        
+        saveItems()
         
         //TODO: - Add and Remove checkmark as user clicks on
         
@@ -108,9 +117,11 @@ class WhatNextController: UITableViewController {
             
             self.itemArray.append(newItem)
             
-            self.defaults.set(self.itemArray, forKey: "whatNextItemArray")
+            //self.defaults.set(self.itemArray, forKey: "whatNextItemArray")
             
-            self.tableView.reloadData()
+            //TODO:- Call saveItems method
+            
+            self.saveItems()
             
         }
         
@@ -132,6 +143,40 @@ class WhatNextController: UITableViewController {
         present(alert, animated: true, completion: nil)
     }
     
+    //MARK: - Model Manipulation Method
+    
+    func saveItems() {
+        
+        let encoder = PropertyListEncoder()
+        
+        do {
+            let data =  try encoder.encode(itemArray)
+            
+            try data.write(to: dataFilePath!)
+            
+        } catch {
+            
+            print("Error encoding item array \(error)")
+        }
+        
+        self.tableView.reloadData()
+        
+    }
+    
+    func loadItems() {
+        if let data = try? Data(contentsOf: dataFilePath!) {
+            
+            let decoder = PropertyListDecoder()
+            
+            do {
+                
+                itemArray = try decoder.decode([Item].self, from: data)
+            } catch {
+                print("Cannot decode itemArray \(error)")
+            }
+            
+        }
+    }
 
 
 }
