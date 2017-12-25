@@ -10,7 +10,7 @@ import UIKit
 
 class WhatNextController: UITableViewController {
 
-    let itemArray = ["PHP Session", "PHP Cookie", "Swift CoreData", "Swift Singleton"]
+    var itemArray = ["PHP Session", "PHP Cookie", "Swift CoreData", "Swift Singleton"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,15 +53,52 @@ class WhatNextController: UITableViewController {
             tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
         }
        
-        
-        
-        
-        
         //Effects as user deselects it
         
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
+    //Add items
+    
+    @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
+        
+        //print("Triggered")
+        
+        var textFieldInAlert = UITextField()
+        
+        //Add Alert Controller
+        
+        let alert = UIAlertController(title: "Add new whatNext item", message: "", preferredStyle: .alert)
+        
+        //What will happen once user click on add item on UIAlert
+        
+        let action = UIAlertAction(title: "Add item", style: .default) { action in
+            
+            //print("Success!")
+            
+            self.itemArray.append(textFieldInAlert.text!)
+            
+            self.tableView.reloadData()
+            
+        }
+        
+        //Add alert Textfield
+        
+        alert.addTextField { textField in
+            textField.placeholder = "Create new item"
+            
+            textFieldInAlert = textField
+            
+        }
+        
+        //Add action
+        
+        alert.addAction(action)
+        
+        //Show alert
+        
+        present(alert, animated: true, completion: nil)
+    }
     
 
 
