@@ -12,9 +12,14 @@ class WhatNextController: UITableViewController {
 
     var itemArray = ["PHP Session", "PHP Cookie", "Swift CoreData", "Swift Singleton"]
     
+    let defaults = UserDefaults.standard
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if let items = defaults.array(forKey: "whatNextItemArray") as? [String] {
+            itemArray = items
+        }
     }
     //MARK: - TableView DataSource Delegate Methods
     
@@ -77,6 +82,8 @@ class WhatNextController: UITableViewController {
             //print("Success!")
             
             self.itemArray.append(textFieldInAlert.text!)
+            
+            self.defaults.set(self.itemArray, forKey: "whatNextItemArray")
             
             self.tableView.reloadData()
             
