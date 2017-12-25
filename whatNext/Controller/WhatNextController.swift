@@ -10,16 +10,35 @@ import UIKit
 
 class WhatNextController: UITableViewController {
 
-    var itemArray = ["PHP Session", "PHP Cookie", "Swift CoreData", "Swift Singleton"]
+    var itemArray = [Item]()
     
     let defaults = UserDefaults.standard
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let items = defaults.array(forKey: "whatNextItemArray") as? [String] {
+        let newItem = Item()
+        
+        newItem.title = "Swift"
+        
+        itemArray.append(newItem)
+
+        
+        let newItem2 = Item()
+        
+        newItem2.title = "PHP"
+        
+        itemArray.append(newItem2)
+        
+        if let items = defaults.array(forKey: "whatNextItemArray") as? [Item] {
             itemArray = items
         }
+        
+        
+        
+        
+        
+        
     }
     //MARK: - TableView DataSource Delegate Methods
     
@@ -34,7 +53,7 @@ class WhatNextController: UITableViewController {
         
         //Display cell
         
-        cell.textLabel?.text = itemArray[indexPath.row]
+        cell.textLabel?.text = itemArray[indexPath.row].title
         
         return cell
         
@@ -47,15 +66,17 @@ class WhatNextController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //print(itemArray[indexPath.row])
         
+        itemArray[indexPath.row].done = !itemArray[indexPath.row].done
+        
         //TODO: - Add and Remove checkmark as user clicks on
         
-        if tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark {
+        if itemArray[indexPath.row].done {
             
-            tableView.cellForRow(at: indexPath)?.accessoryType = .none
+            tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
             
         } else {
             
-            tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
+            tableView.cellForRow(at: indexPath)?.accessoryType = .none
         }
        
         //Effects as user deselects it
@@ -81,7 +102,11 @@ class WhatNextController: UITableViewController {
             
             //print("Success!")
             
-            self.itemArray.append(textFieldInAlert.text!)
+            let newItem = Item()
+            
+            newItem.title = textFieldInAlert.text!
+            
+            self.itemArray.append(newItem)
             
             self.defaults.set(self.itemArray, forKey: "whatNextItemArray")
             
