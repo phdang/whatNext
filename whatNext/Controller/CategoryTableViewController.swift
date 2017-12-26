@@ -9,7 +9,7 @@
 import UIKit
 import RealmSwift
 
-class CategoryTableViewController: UITableViewController {
+class CategoryTableViewController: SwipeTableViewController {
     
     let realm = try! Realm()
     
@@ -21,6 +21,8 @@ class CategoryTableViewController: UITableViewController {
         super.viewDidLoad()
         
         loadCategories()
+        
+        tableView.rowHeight = 80.0
         
     }
 
@@ -38,7 +40,11 @@ class CategoryTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath)
+//        let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath) as! SwipeTableViewCell
+//        
+//        cell.delegate = self
+        
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         
         cell.textLabel?.text = categories?[indexPath.row].name ?? "No category added yet!"
         
@@ -90,6 +96,27 @@ class CategoryTableViewController: UITableViewController {
 //        tableView.reloadData()
     }
 
+    
+    //TODO:- Delete Categories From Swipe
+    
+    override func updateModel(at indexPath: IndexPath) {
+        if let category = self.categories?[indexPath.row] {
+
+            do {
+
+                try self.realm.write {
+
+                    self.realm.delete(category)
+
+                }
+
+            } catch {
+
+                print("Error deleting category \(error)")
+            }
+        }
+    }
+    
     // MARK:- Add new categories
     
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
@@ -108,7 +135,6 @@ class CategoryTableViewController: UITableViewController {
             
             textField = textFieldAlert
             
-            print("Successful")
             
         }
         
@@ -159,3 +185,5 @@ class CategoryTableViewController: UITableViewController {
     }
     
 }
+
+
