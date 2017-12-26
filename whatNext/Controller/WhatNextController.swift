@@ -13,6 +13,14 @@ class WhatNextController: UITableViewController, UISearchBarDelegate {
     
     var itemArray = [Item]()
     
+    var selectedCategory : Category? {
+        
+        didSet{
+            
+            loadItems()
+        }
+    }
+    
     let defaults = UserDefaults.standard
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -26,6 +34,7 @@ class WhatNextController: UITableViewController, UISearchBarDelegate {
         
         super.viewDidLoad()
         
+        navigationItem.title = selectedCategory?.name
         
         //Hardcode itemArray
         
@@ -47,15 +56,14 @@ class WhatNextController: UITableViewController, UISearchBarDelegate {
 //        }
         
         
-        loadItems()
-        
-        
+        //loadItems()
 
     }
     //MARK: - TableView DataSource Delegate Methods
     
     //Set number of rows
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
         return itemArray.count
     }
     
@@ -79,10 +87,7 @@ class WhatNextController: UITableViewController, UISearchBarDelegate {
         //print(itemArray[indexPath.row])
         
         //Remove Item
-        
-        
-        
-        
+      
 //        context.delete(itemArray[indexPath.row])
 //
 //        itemArray.remove(at: indexPath.row)
@@ -133,6 +138,8 @@ class WhatNextController: UITableViewController, UISearchBarDelegate {
             
             self.itemArray.append(newItem)
             
+            newItem.parentCategory = self.selectedCategory
+            
             newItem.done = false
             
             self.saveItems()
@@ -146,6 +153,7 @@ class WhatNextController: UITableViewController, UISearchBarDelegate {
         //Add alert Textfield
         
         alert.addTextField { textField in
+            
             textField.placeholder = "Create new item"
             
             textFieldInAlert = textField
@@ -177,8 +185,23 @@ class WhatNextController: UITableViewController, UISearchBarDelegate {
         
     }
     
-    func loadItems(with request : NSFetchRequest<Item> = Item.fetchRequest()) {
+    func loadItems(with request : NSFetchRequest<Item> = Item.fetchRequest(),with predicate: NSPredicate? = nil) {
         
+        let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
+        
+        if let additionalPredicate = predicate {
+            
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, additionalPredicate])
+            
+        } else {
+            
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate])
+            
+        }
+        
+//        let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, predicate])
+//
+//        request.predicate = compoundPredicate
         
         do {
              itemArray =  try context.fetch(request)
@@ -200,11 +223,11 @@ extension WhatNextController {
         
         let request :  NSFetchRequest<Item> = Item.fetchRequest()
         
-        request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+        let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
         
         request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
         
-        loadItems(with: request)
+        loadItems(with: request, with: predicate)
         
     }
     
@@ -213,6 +236,7 @@ extension WhatNextController {
             loadItems()
             
             DispatchQueue.main.async {
+                
                 searchBar.resignFirstResponder()
             }
         }
