@@ -79,7 +79,14 @@
                             <outlet property="delegate" destination="8fI-0n-ajg" id="VB9-RS-klQ"/>
                         </connections>
                     </tableView>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" title="Items" id="QDc-ZS-0Y8">
+                        <barButtonItem key="leftBarButtonItem" image="back_btn-1" id="yif-XJ-hS1">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="backToRoot:" destination="8fI-0n-ajg" id="Frc-2a-fuw"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="n6j-yq-uHL">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <connections>
@@ -87,6 +94,7 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UDr-nF-xLu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -116,4 +124,7 @@
             <point key="canvasLocation" x="-857" y="86"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="back_btn-1" width="18" height="30"/>
+    </resources>
 </document>

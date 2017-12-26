@@ -114,6 +114,14 @@ class WhatNextController: UITableViewController, UISearchBarDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
+    //MARK:- Back to Root
+    
+    @IBAction func backToRoot(_ sender: UIBarButtonItem) {
+        
+        navigationController?.popToRootViewController(animated: true)
+        
+    }
+    
     //Add items
     
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
@@ -149,7 +157,8 @@ class WhatNextController: UITableViewController, UISearchBarDelegate {
             //TODO:- Call saveItems method
        
         }
-
+        
+        
         //Add alert Textfield
         
         alert.addTextField { textField in
