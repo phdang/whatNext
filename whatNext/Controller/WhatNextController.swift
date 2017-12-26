@@ -9,8 +9,8 @@
 import UIKit
 import CoreData
 
-class WhatNextController: UITableViewController {
-
+class WhatNextController: UITableViewController, UISearchBarDelegate {
+    
     var itemArray = [Item]()
     
     let defaults = UserDefaults.standard
@@ -26,9 +26,10 @@ class WhatNextController: UITableViewController {
         
         super.viewDidLoad()
         
+        
         //Hardcode itemArray
         
-        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
+        //print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
 //
 //        newItem.title = "Swift"
 //
@@ -44,7 +45,11 @@ class WhatNextController: UITableViewController {
 //        if let items = defaults.array(forKey: "whatNextItemArray") as? [Item] {
 //            itemArray = items
 //        }
+        
+        
         loadItems()
+        
+        
 
     }
     //MARK: - TableView DataSource Delegate Methods
@@ -73,6 +78,15 @@ class WhatNextController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //print(itemArray[indexPath.row])
         
+        //Remove Item
+        
+        
+        
+        
+//        context.delete(itemArray[indexPath.row])
+//
+//        itemArray.remove(at: indexPath.row)
+        
         itemArray[indexPath.row].done = !itemArray[indexPath.row].done
         
         //TODO:- Call saveItems method
@@ -82,11 +96,11 @@ class WhatNextController: UITableViewController {
         //TODO: - Add and Remove checkmark as user clicks on
         
         if itemArray[indexPath.row].done {
-            
+
             tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
-            
+
         } else {
-            
+
             tableView.cellForRow(at: indexPath)?.accessoryType = .none
         }
        
@@ -109,10 +123,6 @@ class WhatNextController: UITableViewController {
         
         //What will happen once user click on add item on UIAlert
         
-        
-        
-        
-        
         let action = UIAlertAction(title: "Add item", style: .default) { action in
             
             //print("Success!")
@@ -132,9 +142,7 @@ class WhatNextController: UITableViewController {
             //TODO:- Call saveItems method
        
         }
-        
-        
-        
+
         //Add alert Textfield
         
         alert.addTextField { textField in
@@ -153,12 +161,10 @@ class WhatNextController: UITableViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    //MARK: - Model Manipulation Method
+    //MARK: - Model Manipulation Methods
     
     func saveItems() {
-        
-       
-        
+
         do {
            try context.save()
             
@@ -171,8 +177,8 @@ class WhatNextController: UITableViewController {
         
     }
     
-    func loadItems() {
-        let request : NSFetchRequest<Item> = Item.fetchRequest()
+    func loadItems(with request : NSFetchRequest<Item> = Item.fetchRequest()) {
+        
         
         do {
              itemArray =  try context.fetch(request)
@@ -182,9 +188,35 @@ class WhatNextController: UITableViewController {
             print("Error fetching data from context \(error)")
         }
         
+        tableView.reloadData()
+    }
+}
+
+//MARK: - Search Bar Methods
+
+extension WhatNextController {
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        let request :  NSFetchRequest<Item> = Item.fetchRequest()
+        
+        request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+        
+        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        
+        loadItems(with: request)
         
     }
-
-
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchBar.text?.count == 0 {
+            loadItems()
+            
+            DispatchQueue.main.async {
+                searchBar.resignFirstResponder()
+            }
+        }
+    }
 }
+    
 
