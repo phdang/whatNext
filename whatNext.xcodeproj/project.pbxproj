@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3D4217CC1FF1862C006805A9 /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3D4217CA1FF1862C006805A9 /* DataModel.xcdatamodeld */; };
 		3D4217CE1FF23C9A006805A9 /* CategoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4217CD1FF23C9A006805A9 /* CategoryTableViewController.swift */; };
+		3D4217D21FF26F78006805A9 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4217D11FF26F78006805A9 /* Category.swift */; };
+		3D4217D41FF26F8C006805A9 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4217D31FF26F8C006805A9 /* Item.swift */; };
 		3D9504191FF1454A00878A4D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9504181FF1454A00878A4D /* AppDelegate.swift */; };
 		3D95041B1FF1454A00878A4D /* WhatNextController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D95041A1FF1454A00878A4D /* WhatNextController.swift */; };
 		3D95041E1FF1454A00878A4D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D95041C1FF1454A00878A4D /* Main.storyboard */; };
@@ -19,8 +20,9 @@
 
 /* Begin PBXFileReference section */
 		1583A0E187D67AE511481941 /* Pods_whatNext.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_whatNext.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		3D4217CB1FF1862C006805A9 /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
 		3D4217CD1FF23C9A006805A9 /* CategoryTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTableViewController.swift; sourceTree = "<group>"; };
+		3D4217D11FF26F78006805A9 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
+		3D4217D31FF26F8C006805A9 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		3D9504151FF1454A00878A4D /* whatNext.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = whatNext.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D9504181FF1454A00878A4D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3D95041A1FF1454A00878A4D /* WhatNextController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatNextController.swift; sourceTree = "<group>"; };
@@ -95,7 +97,8 @@
 		3D95042C1FF1709800878A4D /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				3D4217CA1FF1862C006805A9 /* DataModel.xcdatamodeld */,
+				3D4217D11FF26F78006805A9 /* Category.swift */,
+				3D4217D31FF26F8C006805A9 /* Item.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -258,8 +261,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D95041B1FF1454A00878A4D /* WhatNextController.swift in Sources */,
-				3D4217CC1FF1862C006805A9 /* DataModel.xcdatamodeld in Sources */,
+				3D4217D21FF26F78006805A9 /* Category.swift in Sources */,
 				3D9504191FF1454A00878A4D /* AppDelegate.swift in Sources */,
+				3D4217D41FF26F8C006805A9 /* Item.swift in Sources */,
 				3D4217CE1FF23C9A006805A9 /* CategoryTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -447,19 +451,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		3D4217CA1FF1862C006805A9 /* DataModel.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				3D4217CB1FF1862C006805A9 /* DataModel.xcdatamodel */,
-			);
-			currentVersion = 3D4217CB1FF1862C006805A9 /* DataModel.xcdatamodel */;
-			path = DataModel.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = 3D95040D1FF1454A00878A4D /* Project object */;
 }

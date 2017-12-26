@@ -7,11 +7,13 @@
 //
 
 import UIKit
-import CoreData
+import RealmSwift
 
 class WhatNextController: UITableViewController, UISearchBarDelegate {
     
-    var itemArray = [Item]()
+    var whatNextItems : Results<Item>?
+    
+    let realm = try! Realm()
     
     var selectedCategory : Category? {
         
@@ -64,7 +66,7 @@ class WhatNextController: UITableViewController, UISearchBarDelegate {
     //Set number of rows
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return itemArray.count
+        return whatNextItems?.count ?? 1
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -73,7 +75,16 @@ class WhatNextController: UITableViewController, UISearchBarDelegate {
         
         //Display cell
         
-        cell.textLabel?.text = itemArray[indexPath.row].title
+        if let item = whatNextItems?[indexPath.row] {
+            
+            cell.textLabel?.text = whatNextItems?[indexPath.row].title
+            
+            cell.accessoryType = item.done ? .checkmark : .none
+            
+        } else {
+            
+            cell.textLabel?.text = "No Items Added"
+        }
         
         return cell
         
@@ -84,6 +95,30 @@ class WhatNextController: UITableViewController, UISearchBarDelegate {
     //Fire when user clicks on cell
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        if let item = whatNextItems?[indexPath.row] {
+          
+            do {
+                
+                try realm.write {
+                    
+                    //Delete object in database
+                    
+                    //realm.delete(item)
+                    
+                    item.done = !item.done
+                }
+                
+            } catch {
+                
+                print("Error saving done status \(error)")
+                
+            }
+   
+        }
+        
+        tableView.reloadData()
+        
         //print(itemArray[indexPath.row])
         
         //Remove Item
@@ -92,22 +127,22 @@ class WhatNextController: UITableViewController, UISearchBarDelegate {
 //
 //        itemArray.remove(at: indexPath.row)
         
-        itemArray[indexPath.row].done = !itemArray[indexPath.row].done
+//        whatNextItems?[indexPath.row].done = !whatNextItems?[indexPath.row].done
         
         //TODO:- Call saveItems method
         
-        saveItems()
+        //saveItems()
         
         //TODO: - Add and Remove checkmark as user clicks on
         
-        if itemArray[indexPath.row].done {
-
-            tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
-
-        } else {
-
-            tableView.cellForRow(at: indexPath)?.accessoryType = .none
-        }
+//        if whatNextItems?[indexPath.row].done {
+//
+//            tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
+//
+//        } else {
+//
+//            tableView.cellForRow(at: indexPath)?.accessoryType = .none
+//        }
        
         //Effects as user deselects it
         
@@ -140,17 +175,49 @@ class WhatNextController: UITableViewController, UISearchBarDelegate {
             
             //print("Success!")
             
-            let newItem = Item(context: self.context)
+//            let newItem = Item()
+//            
+//            newItem.title = textFieldInAlert.text!
+//            
+//            self.itemArray.append(newItem)
+//            
+//            newItem.parentCategory = self.selectedCategory
+//            
+//            newItem.done = false
             
-            newItem.title = textFieldInAlert.text!
+            if let currentCategory = self.selectedCategory {
+                
+                do {
+                    
+                    try self.realm.write {
+                        
+                        let newItem = Item()
+                        
+                        newItem.title = textFieldInAlert.text!
+                        
+                        newItem.done = false
+                        
+                        newItem.createdAt = Date()
+                        
+                        currentCategory.items.append(newItem)
+                        
+                        self.realm.add(newItem)
+                        
+                    }
+                    
+                } catch {
+                    
+                    print("Error saving realm \(error)")
+                    
+                }
+       
+            }
             
-            self.itemArray.append(newItem)
+            self.tableView.reloadData()
             
-            newItem.parentCategory = self.selectedCategory
-            
-            newItem.done = false
-            
-            self.saveItems()
+            //newItem.parentCategory = self.selectedCategory
+      
+            //self.saveItems()
             
             //self.defaults.set(self.itemArray, forKey: "whatNextItemArray")
             
@@ -194,62 +261,73 @@ class WhatNextController: UITableViewController, UISearchBarDelegate {
         
     }
     
-    func loadItems(with request : NSFetchRequest<Item> = Item.fetchRequest(),with predicate: NSPredicate? = nil) {
+    func loadItems() {
         
-        let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
+        whatNextItems = selectedCategory?.items.sorted(byKeyPath: "title", ascending: true)
         
-        if let additionalPredicate = predicate {
-            
-            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, additionalPredicate])
-            
-        } else {
-            
-            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate])
-            
-        }
-        
-//        let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, predicate])
 //
-//        request.predicate = compoundPredicate
-        
-        do {
-             itemArray =  try context.fetch(request)
-            
-        } catch {
-            
-            print("Error fetching data from context \(error)")
-        }
-        
-        tableView.reloadData()
+//        let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
+//
+//        if let additionalPredicate = predicate {
+//
+//            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, additionalPredicate])
+//
+//        } else {
+//
+//            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate])
+//
+//        }
+//
+////        let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, predicate])
+////
+////        request.predicate = compoundPredicate
+//
+//        do {
+//             itemArray =  try context.fetch(request)
+//
+//        } catch {
+//
+//            print("Error fetching data from context \(error)")
+//        }
+//
+//        tableView.reloadData()
     }
 }
 
 //MARK: - Search Bar Methods
 
 extension WhatNextController {
-    
+
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
-        let request :  NSFetchRequest<Item> = Item.fetchRequest()
+        whatNextItems = whatNextItems?.filter("title CONTAINS[cd] %@", searchBar.text!).sorted(byKeyPath: "createdAt", ascending: true)
         
-        let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
-        
-        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-        
-        loadItems(with: request, with: predicate)
-        
+        tableView.reloadData()
+
+//        let request :  NSFetchRequest<Item> = Item.fetchRequest()
+//
+//        let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+//
+//        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+//
+//        loadItems(with: request, with: predicate)
+
     }
-    
+
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
         if searchBar.text?.count == 0 {
-            loadItems()
             
+            loadItems()
+
             DispatchQueue.main.async {
-                
+
                 searchBar.resignFirstResponder()
             }
         }
+        
+        tableView.reloadData()
     }
 }
-    
+
 
