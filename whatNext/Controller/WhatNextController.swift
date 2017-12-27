@@ -221,7 +221,7 @@ class WhatNextController: SwipeTableViewController, UISearchBarDelegate {
         
     }
     
-    //Add items
+    //MARK:- Add items
     
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         

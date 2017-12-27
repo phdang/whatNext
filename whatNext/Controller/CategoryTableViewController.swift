@@ -17,6 +17,8 @@ class CategoryTableViewController: SwipeTableViewController {
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     var categories : Results<Category>?
+    
+    var rowDidSwipe : Int?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,12 +28,15 @@ class CategoryTableViewController: SwipeTableViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        
         guard let navBar = navigationController?.navigationBar else {
             
             fatalError("Navigation Controller does not exist yet!")
         }
         
         view.backgroundColor = navBar.barTintColor
+        
+        tableView.reloadData()
     }
 
     // MARK: - Table view data source
@@ -217,6 +222,16 @@ class CategoryTableViewController: SwipeTableViewController {
         
     }
     
+    //TODO:- Edit Categories From Swipe
+    
+    override func updateColor(at indexPath: IndexPath) {
+        
+        rowDidSwipe = indexPath.row
+        
+        performSegue(withIdentifier: "changeColor", sender: self)
+        
+    }
+    
     // MARK:- Add new categories
     
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
@@ -280,6 +295,12 @@ class CategoryTableViewController: SwipeTableViewController {
                 destinationVC.selectedCategory = categories?[indexPath.row]
                 
             }
+        } else {
+            
+            let destinationVC = segue.destination as! ColorCategoryController
+            
+            destinationVC.selectedCategory = categories?[rowDidSwipe!]
+            
         }
         
     }

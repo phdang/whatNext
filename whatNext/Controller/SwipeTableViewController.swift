@@ -61,6 +61,22 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
         
         editAction.backgroundColor = FlatOrange()
         
+        if navigationItem.title == "whatNext" {
+            
+            let colorAction = SwipeAction(style: .default, title: "Color") { (action, indexPath) in
+                
+                self.updateColor(at: indexPath)
+                
+            }
+            
+            colorAction.image = UIImage(named: "flag-icon")
+            
+            colorAction.backgroundColor = FlatSkyBlue()
+            
+            return [deleteAction, editAction, colorAction]
+            
+        }
+        
         return [deleteAction, editAction]
     }
     
@@ -80,6 +96,10 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
     }
     
     func updateEdit ( at indexPath: IndexPath) {
+        
+    }
+    
+    func updateColor ( at indexPath: IndexPath) {
         
     }
     

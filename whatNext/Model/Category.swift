@@ -17,4 +17,6 @@ class Category : Object {
     @objc dynamic var hexColor : String?
     
     let items = List<Item>()
+    
+    let colors = List<CategoryChangeColor>()
 }

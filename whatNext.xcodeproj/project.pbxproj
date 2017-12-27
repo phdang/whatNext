@@ -11,6 +11,10 @@
 		3D4217D21FF26F78006805A9 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4217D11FF26F78006805A9 /* Category.swift */; };
 		3D4217D41FF26F8C006805A9 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4217D31FF26F8C006805A9 /* Item.swift */; };
 		3D4217D61FF2C56D006805A9 /* SwipeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4217D51FF2C56D006805A9 /* SwipeTableViewController.swift */; };
+		3D4217D81FF40AC2006805A9 /* ColorCategoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4217D71FF40AC2006805A9 /* ColorCategoryController.swift */; };
+		3D4217DA1FF4111B006805A9 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4217D91FF4111B006805A9 /* Color.swift */; };
+		3D4217DC1FF4178B006805A9 /* ColorBank.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4217DB1FF4178B006805A9 /* ColorBank.swift */; };
+		3D4217DE1FF442AA006805A9 /* CategoryChangeColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4217DD1FF442AA006805A9 /* CategoryChangeColor.swift */; };
 		3D9504191FF1454A00878A4D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9504181FF1454A00878A4D /* AppDelegate.swift */; };
 		3D95041B1FF1454A00878A4D /* WhatNextController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D95041A1FF1454A00878A4D /* WhatNextController.swift */; };
 		3D95041E1FF1454A00878A4D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D95041C1FF1454A00878A4D /* Main.storyboard */; };
@@ -25,6 +29,10 @@
 		3D4217D11FF26F78006805A9 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		3D4217D31FF26F8C006805A9 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		3D4217D51FF2C56D006805A9 /* SwipeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeTableViewController.swift; sourceTree = "<group>"; };
+		3D4217D71FF40AC2006805A9 /* ColorCategoryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorCategoryController.swift; sourceTree = "<group>"; };
+		3D4217D91FF4111B006805A9 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		3D4217DB1FF4178B006805A9 /* ColorBank.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorBank.swift; sourceTree = "<group>"; };
+		3D4217DD1FF442AA006805A9 /* CategoryChangeColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryChangeColor.swift; sourceTree = "<group>"; };
 		3D9504151FF1454A00878A4D /* whatNext.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = whatNext.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D9504181FF1454A00878A4D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3D95041A1FF1454A00878A4D /* WhatNextController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatNextController.swift; sourceTree = "<group>"; };
@@ -85,6 +93,7 @@
 				3D4217D51FF2C56D006805A9 /* SwipeTableViewController.swift */,
 				3D4217CD1FF23C9A006805A9 /* CategoryTableViewController.swift */,
 				3D95041A1FF1454A00878A4D /* WhatNextController.swift */,
+				3D4217D71FF40AC2006805A9 /* ColorCategoryController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -102,6 +111,9 @@
 			children = (
 				3D4217D11FF26F78006805A9 /* Category.swift */,
 				3D4217D31FF26F8C006805A9 /* Item.swift */,
+				3D4217D91FF4111B006805A9 /* Color.swift */,
+				3D4217DB1FF4178B006805A9 /* ColorBank.swift */,
+				3D4217DD1FF442AA006805A9 /* CategoryChangeColor.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -269,8 +281,12 @@
 			files = (
 				3D95041B1FF1454A00878A4D /* WhatNextController.swift in Sources */,
 				3D4217D21FF26F78006805A9 /* Category.swift in Sources */,
+				3D4217DC1FF4178B006805A9 /* ColorBank.swift in Sources */,
+				3D4217DE1FF442AA006805A9 /* CategoryChangeColor.swift in Sources */,
 				3D9504191FF1454A00878A4D /* AppDelegate.swift in Sources */,
 				3D4217D41FF26F8C006805A9 /* Item.swift in Sources */,
+				3D4217D81FF40AC2006805A9 /* ColorCategoryController.swift in Sources */,
+				3D4217DA1FF4111B006805A9 /* Color.swift in Sources */,
 				3D4217D61FF2C56D006805A9 /* SwipeTableViewController.swift in Sources */,
 				3D4217CE1FF23C9A006805A9 /* CategoryTableViewController.swift in Sources */,
 			);
