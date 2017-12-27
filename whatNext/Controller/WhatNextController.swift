@@ -9,7 +9,6 @@
 import UIKit
 import RealmSwift
 import ChameleonFramework
-
 class WhatNextController: SwipeTableViewController, UISearchBarDelegate {
     
     
@@ -364,7 +363,7 @@ class WhatNextController: SwipeTableViewController, UISearchBarDelegate {
     
     //TODO:- Delete Items From Swipe
     
-    override func updateModel(at indexPath: IndexPath) {
+    override func updateDeletion(at indexPath: IndexPath) {
         
         if let item = whatNextItems?[indexPath.row] {
             
@@ -384,8 +383,61 @@ class WhatNextController: SwipeTableViewController, UISearchBarDelegate {
         }
         
     }
+    
+    //TODO:- Edit Categories From Swipe
+    
+    override func updateEdit(at indexPath: IndexPath) {
+        
+        var textField : UITextField = UITextField()
+        
+        //TODO:- Add Alert
+        
+        let alert = UIAlertController(title: "Edit Item", message: "", preferredStyle: .alert)
+        
+        if let item = self.whatNextItems?[indexPath.row] {
+            
+            alert.addTextField { textFieldAlert in
+                
+                textField = textFieldAlert
+                
+                textField.placeholder = item.title
+            }
+            
+            //TODO:- Add Action
+            
+            let action = UIAlertAction(title: "Edit", style: .default, handler: { action in
+                
+                do {
+                    
+                    try self.realm.write {
+                        
+                        
+                        
+                        if textField.text!.count != 0 {
+                            
+                            item.title = textField.text!
+                        }
+                        
+                        self.tableView.reloadData()
+                    }
+                    
+                } catch {
+                    
+                    print("Error in editting item \(error)")
+                    
+                }
+                
+            })
+            
+            alert.addAction(action)
+            
+            //TODO:- Show Alert
+            
+            present(alert, animated: true, completion: nil)
+            
+        }
+    }
 }
-
 
 //MARK: - Search Bar Methods
 

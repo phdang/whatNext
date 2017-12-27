@@ -146,7 +146,7 @@ class CategoryTableViewController: SwipeTableViewController {
 
     //TODO:- Delete Categories From Swipe
     
-    override func updateModel(at indexPath: IndexPath) {
+    override func updateDeletion(at indexPath: IndexPath) {
         if let category = self.categories?[indexPath.row] {
 
             do {
@@ -162,6 +162,59 @@ class CategoryTableViewController: SwipeTableViewController {
                 print("Error deleting category \(error)")
             }
         }
+    }
+    
+    //TODO:- Edit Categories From Swipe
+    
+    override func updateEdit(at indexPath: IndexPath) {
+        
+        var textField : UITextField = UITextField()
+        
+        //TODO:- Add Alert
+        
+        let alert = UIAlertController(title: "Edit Category", message: "", preferredStyle: .alert)
+        
+        if let category = self.categories?[indexPath.row] {
+        
+        alert.addTextField { textFieldAlert in
+            
+            textField = textFieldAlert
+            
+            textField.placeholder = category.name
+        }
+            
+            //TODO:- Add Action
+        
+            let action = UIAlertAction(title: "Edit", style: .default, handler: { action in
+                
+                do {
+                    
+                    try self.realm.write {
+                        
+                        if textField.text!.count != 0 {
+                            
+                            category.name = textField.text!
+                        }
+                        
+                         self.tableView.reloadData()
+                    }
+                    
+                } catch {
+                    
+                    print("Error in editting category \(error)")
+                    
+                }
+                
+            })
+            
+            alert.addAction(action)
+            
+            //TODO:- Show Alert
+            
+            present(alert, animated: true, completion: nil)
+            
+        }
+        
     }
     
     // MARK:- Add new categories
