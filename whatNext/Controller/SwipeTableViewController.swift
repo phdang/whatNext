@@ -8,14 +8,19 @@
 
 import UIKit
 import SwipeCellKit
+import ChameleonFramework
 
 class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        tableView.rowHeight = 80
+        
+        tableView.separatorStyle = .none
         
     }
+    
     //TableView Data Source
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -37,7 +42,7 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
             // handle action by updating model with deletion
             
             //print(indexPath.row)
-            print("Delete Cell")
+            //print("Delete Cell")
             
             self.updateModel(at: indexPath)
 
@@ -62,6 +67,17 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
     
     func updateModel (at indexPath : IndexPath) {
         
+    }
+    
+    func addNavBarColor(with navBar: UINavigationBar, color: UIColor) {
+        
+        navBar.barTintColor = color
+        
+        navBar.tintColor = ContrastColorOf(color, returnFlat: true)
+        
+        navBar.largeTitleTextAttributes = [NSAttributedStringKey.foregroundColor: ContrastColorOf(color, returnFlat: true)]
+        
+        view.backgroundColor = color
     }
 }
 

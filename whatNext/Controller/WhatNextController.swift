@@ -8,8 +8,12 @@
 
 import UIKit
 import RealmSwift
+import ChameleonFramework
 
-class WhatNextController: UITableViewController, UISearchBarDelegate {
+class WhatNextController: SwipeTableViewController, UISearchBarDelegate {
+    
+    
+    @IBOutlet weak var searchBar: UISearchBar!
     
     var whatNextItems : Results<Item>?
     
@@ -61,6 +65,55 @@ class WhatNextController: UITableViewController, UISearchBarDelegate {
         //loadItems()
 
     }
+    
+    //View Will Appear
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
+        guard let navBar = navigationController?.navigationBar else {
+            
+            fatalError("Navigation Controller does not exist")
+            
+        }
+        
+        guard let colorHex = selectedCategory?.hexColor else {
+            
+            fatalError()
+            
+        }
+            
+            guard let navBarColor = UIColor(hexString: colorHex) else {
+                
+                fatalError()
+                
+            }
+    
+        super.addNavBarColor(with: navBar, color: navBarColor)
+        
+        searchBar.barTintColor = navBarColor
+        
+    }
+    
+    //View Will DissAppear
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        
+        let defaultHexColor : String = "#034287"
+        
+        guard let defaultColor : UIColor = UIColor(hexString: defaultHexColor) else {
+            
+            fatalError("Cannot convert defaultHexColor into UIColor")
+        }
+        
+        guard let navBar = navigationController?.navigationBar else {
+            
+            fatalError("Navigation Controller does not exist")
+        }
+        
+        super.addNavBarColor(with: navBar, color: defaultColor)
+        
+    }
+    
     //MARK: - TableView DataSource Delegate Methods
     
     //Set number of rows
@@ -71,13 +124,25 @@ class WhatNextController: UITableViewController, UISearchBarDelegate {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "WhatNextItemCell", for: indexPath)
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
+        
+//        let cell = tableView.dequeueReusableCell(withIdentifier: "WhatNextItemCell", for: indexPath)
         
         //Display cell
         
         if let item = whatNextItems?[indexPath.row] {
             
             cell.textLabel?.text = whatNextItems?[indexPath.row].title
+            
+            let percentDarkened : CGFloat = indexPath.row != 0 ? CGFloat(indexPath.row) / CGFloat(whatNextItems!.count) : 0.1
+            
+            if let color =  UIColor(hexString: selectedCategory!.hexColor!)?.darken(byPercentage: percentDarkened ) {
+                
+                cell.backgroundColor = color
+                
+                cell.textLabel?.textColor = ContrastColorOf(color, returnFlat: true)
+                
+            }
             
             cell.accessoryType = item.done ? .checkmark : .none
             
@@ -247,6 +312,8 @@ class WhatNextController: UITableViewController, UISearchBarDelegate {
     
     //MARK: - Model Manipulation Methods
     
+    //TODO:- Save Items
+    
     func saveItems() {
 
         do {
@@ -260,6 +327,8 @@ class WhatNextController: UITableViewController, UISearchBarDelegate {
         self.tableView.reloadData()
         
     }
+    
+    //TODO:- Load Items
     
     func loadItems() {
         
@@ -292,7 +361,31 @@ class WhatNextController: UITableViewController, UISearchBarDelegate {
 //
 //        tableView.reloadData()
     }
+    
+    //TODO:- Delete Items From Swipe
+    
+    override func updateModel(at indexPath: IndexPath) {
+        
+        if let item = whatNextItems?[indexPath.row] {
+            
+            do {
+                
+                try realm.write {
+                    
+                     realm.delete(item)
+                    
+                }
+                
+            } catch {
+                
+                print("Error deleting item \(error)")
+            }
+
+        }
+        
+    }
 }
+
 
 //MARK: - Search Bar Methods
 
@@ -328,6 +421,8 @@ extension WhatNextController {
         
         tableView.reloadData()
     }
+    
+    
 }
 
 

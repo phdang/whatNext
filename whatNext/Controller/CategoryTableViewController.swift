@@ -8,6 +8,7 @@
 
 import UIKit
 import RealmSwift
+import ChameleonFramework
 
 class CategoryTableViewController: SwipeTableViewController {
     
@@ -22,8 +23,15 @@ class CategoryTableViewController: SwipeTableViewController {
         
         loadCategories()
         
-        tableView.rowHeight = 80.0
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        guard let navBar = navigationController?.navigationBar else {
+            
+            fatalError("Navigation Controller does not exist yet!")
+        }
         
+        view.backgroundColor = navBar.barTintColor
     }
 
     // MARK: - Table view data source
@@ -48,6 +56,8 @@ class CategoryTableViewController: SwipeTableViewController {
         
         cell.textLabel?.text = categories?[indexPath.row].name ?? "No category added yet!"
         
+        addColor(cell: cell, at: indexPath.row)
+  
         return cell
     }
     
@@ -58,6 +68,7 @@ class CategoryTableViewController: SwipeTableViewController {
     // TODO:- Save Categories Methods
     
     func save(category: Category) {
+        
         
         do {
             
@@ -72,7 +83,7 @@ class CategoryTableViewController: SwipeTableViewController {
             print("Error saving context \(error)")
         }
         
-        self.tableView.reloadData()
+        tableView.reloadData()
         
     }
     
@@ -95,8 +106,44 @@ class CategoryTableViewController: SwipeTableViewController {
 //        
 //        tableView.reloadData()
     }
-
     
+    // TODO:- Add Color To Categories Methods
+    
+    func addColor(cell: UITableViewCell, at row: Int) {
+        
+        if let categoryHexColor = categories?[row].hexColor  {
+            
+            cell.backgroundColor = UIColor(hexString: categoryHexColor)
+            
+        } else {
+            
+            cell.backgroundColor = UIColor.randomFlat
+            
+            do {
+                
+                try realm.write {
+                    
+                    if let category = categories?[row] {
+                            
+                            category.hexColor = cell.backgroundColor?.hexValue()
+                            
+                            realm.add(category)
+                    }
+                }
+                
+            } catch {
+                
+                print("Error save hexColor \(error)")
+            }
+        }
+        
+        if let color = cell.backgroundColor {
+            
+            cell.textLabel?.textColor = ContrastColorOf(color, returnFlat: true)
+            
+        }
+    }
+
     //TODO:- Delete Categories From Swipe
     
     override func updateModel(at indexPath: IndexPath) {
