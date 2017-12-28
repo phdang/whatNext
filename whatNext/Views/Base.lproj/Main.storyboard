@@ -74,6 +74,9 @@
                     <navigationItem key="navigationItem" title="Color" id="BDv-iR-TQl">
                         <barButtonItem key="leftBarButtonItem" image="back_btn-1" id="rrp-ZM-1su">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="backTapped:" destination="U3L-lG-MU8" id="7On-r1-Jk9"/>
+                            </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="done" id="Kfy-Ov-cH8">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

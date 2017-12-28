@@ -75,6 +75,10 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
             
             return [deleteAction, editAction, colorAction]
             
+        } else if navigationItem.title == "Color" {
+            
+            return nil
+            
         }
         
         return [deleteAction, editAction]

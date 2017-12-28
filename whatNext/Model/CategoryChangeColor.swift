@@ -11,6 +11,10 @@ import RealmSwift
 
 class CategoryChangeColor : Object {
     
+    @objc dynamic var id : Int = 0
+    
+    @objc dynamic var parentName : String = ""
+    
     @objc dynamic var name : String = ""
     
     @objc dynamic var done : Bool = false
