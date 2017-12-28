@@ -301,13 +301,21 @@ extension ColorCategoryController {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
         colorBank = colorBank?.filter("name CONTAINS[cd] %@", searchBar.text!).sorted(byKeyPath: "name", ascending: true)
-            
+        
             tableView.reloadData()
-            
+        
             DispatchQueue.main.async {
                 
                 searchBar.resignFirstResponder()
             }
+        
+        if let colors = colorBank {
+            
+            if colors.count == 0 {
+                
+                loadColors()
+            }
+        }
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -320,9 +328,9 @@ extension ColorCategoryController {
                 
                 searchBar.resignFirstResponder()
             }
+            
+            tableView.reloadData()
         }
-        
-        tableView.reloadData()
     }
     
 }
