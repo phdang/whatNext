@@ -474,7 +474,6 @@ extension WhatNextController {
         tableView.reloadData()
     }
     
-    
 }
 
 

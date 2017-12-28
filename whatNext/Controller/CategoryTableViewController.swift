@@ -68,8 +68,6 @@ class CategoryTableViewController: SwipeTableViewController {
     
     // MARK:- Data Manipulation Methods
     
-    
-    
     // TODO:- Save Categories Methods
     
     func save(category: Category) {
@@ -281,7 +279,6 @@ class CategoryTableViewController: SwipeTableViewController {
         
        performSegue(withIdentifier: "goToItem", sender: self)
         
-        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -295,6 +292,7 @@ class CategoryTableViewController: SwipeTableViewController {
                 destinationVC.selectedCategory = categories?[indexPath.row]
                 
             }
+            
         } else {
             
             let destinationVC = segue.destination as! ColorCategoryController
@@ -302,9 +300,7 @@ class CategoryTableViewController: SwipeTableViewController {
             destinationVC.selectedCategory = categories?[rowDidSwipe!]
             
         }
-        
     }
-    
 }
 
 

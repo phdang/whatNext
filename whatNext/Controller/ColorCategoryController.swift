@@ -10,9 +10,13 @@ import UIKit
 import RealmSwift
 import ChameleonFramework
 
-class ColorCategoryController: SwipeTableViewController {
+class ColorCategoryController: SwipeTableViewController, UISearchBarDelegate {
+    
+    @IBOutlet weak var searchBar: UISearchBar!
     
     var colorBank : Results<CategoryChangeColor>?
+    
+    var bank : Results<CategoryChangeColor>?
     
     let realm = try! Realm()
     
@@ -21,7 +25,7 @@ class ColorCategoryController: SwipeTableViewController {
         didSet {
             
             loadColors()
-            
+            bank = colorBank
         }
     }
 
@@ -31,10 +35,12 @@ class ColorCategoryController: SwipeTableViewController {
     
     var firstSelected : Int?
     
+    var checkSelected: Int?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //print(selectedCategory?.hexColor)
+        print(allColors.list.count)
         appendColors()
        
     }
@@ -53,6 +59,13 @@ class ColorCategoryController: SwipeTableViewController {
                 }
             }
         }
+        
+        guard let navBar = navigationController?.navigationBar else {
+            
+            fatalError("Navigation Controller does not exist yet!")
+        }
+        
+        searchBar.barTintColor = navBar.barTintColor
     }
 
     // MARK: - Table view data source
@@ -64,7 +77,7 @@ class ColorCategoryController: SwipeTableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return allColors.list.count
+        return colorBank?.count ?? 1
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -74,7 +87,7 @@ class ColorCategoryController: SwipeTableViewController {
         
         cell.textLabel?.text = colorBank?[indexPath.row].name
         
-        cell.backgroundColor = allColors.list[indexPath.row].color
+        cell.backgroundColor = UIColor(hexString: (colorBank?[indexPath.row].hexName)!)
         
         guard let backgroundColor = cell.backgroundColor else {
             
@@ -88,9 +101,8 @@ class ColorCategoryController: SwipeTableViewController {
             cell.accessoryType = done ? .checkmark : .none
             
             if cell.accessoryType == .checkmark {
-                
-                selectedRow = indexPath.row
-                
+                    
+                    checkSelected = indexPath.row
             }
             
         }
@@ -102,23 +114,32 @@ class ColorCategoryController: SwipeTableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+        //print(checkSelected)
+        
+        removeDone()
+        
         if let newColor = colorBank?[indexPath.row] {
             
             do {
                 
                 try realm.write {
-                    if let selected = selectedRow {
-                        
-                        if let done = colorBank?[selected].done {
-                            
-                            colorBank?[selected].done = !done
-            
-                        }
-                        
-                    }
                     
-                    newColor.done = !newColor.done
-  
+                        //print(bank?[newColor.id].id)
+                        
+                        if let done = bank?[newColor.id].done {
+                            
+                            
+                            if let selected = selectedRow {
+                                
+                                bank?[selected].done = false
+                                
+                            }
+                            
+                            selectedRow = newColor.id
+                            
+                            bank?[newColor.id].done = !done
+                            
+                        }
                 }
                 
             } catch {
@@ -128,8 +149,6 @@ class ColorCategoryController: SwipeTableViewController {
             }
             
         }
-        
-        selectedRow = indexPath.row
         
         tableView.deselectRow(at: indexPath, animated: true)
        
@@ -142,17 +161,19 @@ class ColorCategoryController: SwipeTableViewController {
     
     @IBAction func backTapped(_ sender: UIBarButtonItem) {
         
+        removeDone()
+        
         do {
             
             try realm.write {
                 
-                if let selected = selectedRow {
+                if let selected = checkSelected {
                     
-                    colorBank?[selected].done = false
+                    bank?[selected].done = false
                     
                     if let row = firstSelected {
                         
-                        colorBank?[row].done = true
+                        bank?[row].done = true
                     }
                 }
             }
@@ -177,7 +198,7 @@ class ColorCategoryController: SwipeTableViewController {
                 
                 if let row = selectedRow {
                     
-                    selectedCategory?.hexColor = allColors.list[row].hexColor
+                    selectedCategory?.hexColor = bank?[row].hexName
                 }
             }
             
@@ -217,13 +238,15 @@ class ColorCategoryController: SwipeTableViewController {
                         
                         newColor.name = allColors.list[i].colorName
                         
+                        newColor.hexName = allColors.list[i].hexColor
+                        
                         newColor.parentName = currentCategory.name
                         
                         if (selectedCategory?.colors.count)! < allColors.list.count {
                             
                             currentCategory.colors.append(newColor)
                         }
-               
+                        
                     }
                     
                 } catch {
@@ -233,6 +256,74 @@ class ColorCategoryController: SwipeTableViewController {
                 
             }
         }
+        
+    }
+    
+    //TODO: - Remove Done
+    
+    func removeDone() {
+        
+        if let checkRow = checkSelected {
+            
+            letFalseDone(newColor: bank?[checkRow])
+            
+            letFalseDone(newColor: colorBank?[checkRow])
+        }
+        
+    }
+    
+    
+    func letFalseDone(newColor: CategoryChangeColor?) {
+        
+        do {
+            
+            try realm.write {
+                
+                newColor?.done = false
+                
+            }
+            
+        } catch {
+            
+            print("Error removing first done selected \(error)")
             
         }
+    }
+    
 }
+    
+
+
+//MARK: - Search Bar Methods
+
+extension ColorCategoryController {
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        colorBank = colorBank?.filter("name CONTAINS[cd] %@", searchBar.text!).sorted(byKeyPath: "name", ascending: true)
+            
+            tableView.reloadData()
+            
+            DispatchQueue.main.async {
+                
+                searchBar.resignFirstResponder()
+            }
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
+        if searchBar.text?.count == 0 {
+            
+            loadColors()
+            
+            DispatchQueue.main.async {
+                
+                searchBar.resignFirstResponder()
+            }
+        }
+        
+        tableView.reloadData()
+    }
+    
+}
+

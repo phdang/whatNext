@@ -17,6 +17,8 @@ class CategoryChangeColor : Object {
     
     @objc dynamic var name : String = ""
     
+    @objc dynamic var hexName : String = ""
+    
     @objc dynamic var done : Bool = false
     
     var parentCategory = LinkingObjects(fromType: Category.self, property: "colors")
