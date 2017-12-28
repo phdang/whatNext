@@ -448,6 +448,14 @@ extension WhatNextController {
         whatNextItems = whatNextItems?.filter("title CONTAINS[cd] %@", searchBar.text!).sorted(byKeyPath: "createdAt", ascending: true)
         
         tableView.reloadData()
+        
+        if let items = whatNextItems {
+            
+            if items.count == 0 {
+                
+                loadItems()
+            }
+        }
 
 //        let request :  NSFetchRequest<Item> = Item.fetchRequest()
 //
@@ -469,9 +477,9 @@ extension WhatNextController {
 
                 searchBar.resignFirstResponder()
             }
+            
+            tableView.reloadData()
         }
-        
-        tableView.reloadData()
     }
     
 }
