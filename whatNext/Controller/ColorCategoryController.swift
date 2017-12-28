@@ -304,11 +304,6 @@ extension ColorCategoryController {
         
             tableView.reloadData()
         
-            DispatchQueue.main.async {
-                
-                searchBar.resignFirstResponder()
-            }
-        
         if let colors = colorBank {
             
             if colors.count == 0 {
@@ -320,9 +315,9 @@ extension ColorCategoryController {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
+        loadColors()
+        
         if searchBar.text?.count == 0 {
-            
-            loadColors()
             
             DispatchQueue.main.async {
                 
