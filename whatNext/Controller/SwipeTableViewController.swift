@@ -113,6 +113,8 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
         
         navBar.tintColor = ContrastColorOf(color, returnFlat: true)
         
+        navBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: ContrastColorOf(color, returnFlat: true)]
+        
         navBar.largeTitleTextAttributes = [NSAttributedStringKey.foregroundColor: ContrastColorOf(color, returnFlat: true)]
         
         view.backgroundColor = color
