@@ -270,7 +270,19 @@ class ColorCategoryController: SwipeTableViewController, UISearchBarDelegate {
             
             letFalseDone(newColor: bank?[checkRow])
             
-            letFalseDone(newColor: colorBank?[checkRow])
+            guard let countColors = colorBank?.count else {
+                fatalError("No color")
+            }
+            
+            if checkRow < countColors {
+                
+                letFalseDone(newColor: colorBank?[checkRow])
+            }
+            
+        } else if let checkRow = firstSelected {
+            
+            letFalseDone(newColor: bank?[checkRow])
+            
         }
         
     }

@@ -39,7 +39,6 @@ class ColorBank {
         list.append(Color(colorFlat: FlatCoffee(), hex: FlatCoffee().hexValue(), name: "Coffe"))
         list.append(Color(colorFlat: FlatPowderBlue(), hex: FlatPowderBlue().hexValue(), name: "Powder Blue"))
         list.append(Color(colorFlat: FlatBlue(), hex: FlatBlue().hexValue(), name: "Blue"))
-        list.append(Color(colorFlat: UIColor(hexString: "#FFB6C1")!,hex: "#FFB6C1", name: "Light Pink"))
         list.append(Color(colorFlat: UIColor(hexString: "#F0F8FF")!,hex: "#F0F8FF", name: "Alice Blue"))
         list.append(Color(colorFlat: UIColor(hexString: "#FAEBD7")!,hex: "#FAEBD7", name: "Antique White"))
         list.append(Color(colorFlat: UIColor(hexString: "#00FFFF")!,hex: "#00FFFF", name: "Aqua"))
