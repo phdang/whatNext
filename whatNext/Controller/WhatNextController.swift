@@ -454,6 +454,12 @@ extension WhatNextController {
             if items.count == 0 {
                 
                 loadItems()
+            } else {
+                
+                DispatchQueue.main.async {
+                    
+                    searchBar.resignFirstResponder()
+                }
             }
         }
 

@@ -40,9 +40,10 @@ class ColorCategoryController: SwipeTableViewController, UISearchBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print(allColors.list.count)
         appendColors()
-       
+        
+        //print(allColors.list.count)
+
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -224,9 +225,13 @@ class ColorCategoryController: SwipeTableViewController, UISearchBarDelegate {
     
     func appendColors() {
         
+        //Sort Color ASC Alphabets
+        
+        allColors.list =  allColors.list.sorted(by: {$0.colorName < $1.colorName})
+        
         for i in 0..<allColors.list.count {
             
-            if let currentCategory = self.selectedCategory {
+            if let currentCategory = selectedCategory {
                 
                 do {
                     
@@ -235,25 +240,23 @@ class ColorCategoryController: SwipeTableViewController, UISearchBarDelegate {
                         let newColor = CategoryChangeColor()
                         
                         newColor.id = i
-                        
+                  
                         newColor.name = allColors.list[i].colorName
-                        
+                            
                         newColor.hexName = allColors.list[i].hexColor
-                        
+     
                         newColor.parentName = currentCategory.name
                         
                         if (selectedCategory?.colors.count)! < allColors.list.count {
                             
                             currentCategory.colors.append(newColor)
                         }
-                        
                     }
                     
                 } catch {
                     
                     print("Error adding new colors \(error)")
                 }
-                
             }
         }
         
@@ -271,7 +274,6 @@ class ColorCategoryController: SwipeTableViewController, UISearchBarDelegate {
         }
         
     }
-    
     
     func letFalseDone(newColor: CategoryChangeColor?) {
         
@@ -291,8 +293,6 @@ class ColorCategoryController: SwipeTableViewController, UISearchBarDelegate {
     }
     
 }
-    
-
 
 //MARK: - Search Bar Methods
 
@@ -309,6 +309,12 @@ extension ColorCategoryController {
             if colors.count == 0 {
                 
                 loadColors()
+            } else {
+                
+                DispatchQueue.main.async {
+                    
+                    searchBar.resignFirstResponder()
+                }
             }
         }
     }
@@ -327,6 +333,5 @@ extension ColorCategoryController {
             tableView.reloadData()
         }
     }
-    
 }
 
